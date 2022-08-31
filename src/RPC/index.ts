@@ -8,7 +8,7 @@ class RPC {
   constructor(url: string) {
     this.url = new URL(url);
   }
-
+  // TODO: change any to type
   async getBlockWithTxHashes(params: GetBlockWithTxHashesParam): Promise<any> {
     const body: JSONRPCBody = {
       ...JSON_RPC_BODY_COMMON,
