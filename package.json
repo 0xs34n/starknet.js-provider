@@ -1,5 +1,27 @@
 {
   "devDependencies": {
     "typescript": "^4.8.2"
-  }
+  },
+  "dependencies": {
+    "isomorphic-unfetch": "^3.1.0"
+  },
+  "name": "starknet.js-provider",
+  "description": "A minimal RPC provider implementation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0xs34n/starknet.js-provider.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0xs34n/starknet.js-provider/issues"
+  },
+  "homepage": "https://github.com/0xs34n/starknet.js-provider#readme"
 }

@@ -1,4 +1,4 @@
-import { network } from "./feederGateway.types";
+import { network } from "./types";
 
 export function getFeederGatewayUrl(network: network) {
   if (network === "MAIN_NET") {

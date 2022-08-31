@@ -1,5 +1,5 @@
-import { getFeederGatewayUrl } from "./feederGateway.utils";
-import { network } from "./feederGateway.types";
+import { getFeederGatewayUrl } from "./utils";
+import { network } from "./types";
 
 class FeederGateway {
   url: URL;
