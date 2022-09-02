@@ -1,31 +1,25 @@
-export type GetBlockWithTxHashesParam = BlockID;
-
 export interface JSONRPCBody {
   jsonrpc: "2.0";
-  id: "0";
+  id: string;
   method: string;
-  params: GetBlockWithTxHashesParam;
+  params: BlockID;
 }
 
 export interface BlockID {
-  block_id: BlockHashObject | BlockNumberObject | BlockTag;
+  block_id: BlockHash | BlockNumber | BlockTag;
 }
 
 type BlockTag = "latest" | "pending";
 
-interface BlockHashObject {
-  block_hash: BlockHash;
+export interface BlockHash {
+  block_hash: felt;
 }
 
-interface BlockNumberObject {
+export interface BlockNumber {
   block_number: number;
 }
 
 type felt = number; // TODO
-
-type BlockHash = felt;
-
-interface GetBlockWithTxHashesRes {}
 
 interface BlockWithTxs {
   status: BlockStatus;

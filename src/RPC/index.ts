@@ -1,6 +1,5 @@
 import "isomorphic-unfetch";
-import { JSON_RPC_BODY_COMMON } from "./constants";
-import { JSONRPCBody, GetBlockWithTxHashesParam } from "./types";
+import { JSONRPCBody, BlockID } from "./types";
 
 class RPC {
   url: URL;
@@ -8,12 +7,12 @@ class RPC {
   constructor(url: string) {
     this.url = new URL(url);
   }
-  // TODO: change any to type
-  async getBlockWithTxHashes(params: GetBlockWithTxHashesParam): Promise<any> {
+  async getBlockWithTxHashes(block_id: BlockID): Promise<any> {
     const body: JSONRPCBody = {
-      ...JSON_RPC_BODY_COMMON,
+      jsonrpc: "2.0",
+      id: "0",
       method: "starknet_getBlockWithTxHashes",
-      params,
+      params: block_id,
     };
 
     const response = await fetch(this.url, {
