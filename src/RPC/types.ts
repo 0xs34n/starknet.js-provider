@@ -215,10 +215,10 @@ export type BlockHashAndNumberOutput = {
 };
 
 export type SyncingOutput = {
-  syncStatus: syncStatus;
+  syncStatus: SyncStatus;
 }
 
-type syncStatus = boolean | {
+type SyncStatus = boolean | {
   startingBlockHash: BlockHash;
   startingBlockNum: NumAsHex;
   currentBlockHash: BlockHash;
