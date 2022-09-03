@@ -14,12 +14,12 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.skip("param block_id where block_hash", async () => {
+      test.skip("param block_id is block_hash", async () => {
         // TODO - need to do after we validate block_hash with regex typing
       });
 
-      test.skip("param block_id where block_tag=pending", async () => {
-        // TODO
+      test.skip("param block_id wis block_tag=pending", async () => {
+        // TODO - need to enable pending block in pathfinder
         const response = await rpc.getBlockWithTxHashes({
           block_id: "pending",
         });
@@ -27,7 +27,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test("param block_id where block_tag=latest", async () => {
+      test("param block_id is block_tag=latest", async () => {
         const response = await rpc.getBlockWithTxHashes({
           block_id: "latest",
         });
