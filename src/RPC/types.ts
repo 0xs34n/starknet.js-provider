@@ -1,3 +1,5 @@
+
+
 export interface JsonRpcRequest {
   jsonrpc: "2.0";
   id: string;
@@ -5,7 +7,9 @@ export interface JsonRpcRequest {
   params: any;
 }
 
-export type BlockId = { block_id: BlockHash | BlockNumber | BlockTag };
+export interface BlockId {
+  block_id: BlockHash | BlockNumber | BlockTag;
+}
 
 export type Felt = string;
 
@@ -13,32 +17,39 @@ export type Address = Felt;
 
 export type TxnHash = Felt;
 
-type TxnStatus = 'PENDING' | 'ACCEPTED_ON_L2' | 'ACCEPTED_ON_L1' | 'REJECTED';
+type TxnStatus = "PENDING" | "ACCEPTED_ON_L2" | "ACCEPTED_ON_L1" | "REJECTED";
 
-type TxnType = 'declare' | 'deploy' | 'invoke' | 'l1Handler';
+type TxnType = "declare" | "deploy" | "invoke" | "l1Handler";
 
-type BlockHash = { block_hash: Felt };
+interface BlockHash {
+  block_hash: Felt;
+}
 
-type BlockNumber = { block_number: number };
+interface BlockNumber {
+  block_number: number;
+}
 
 type BlockTag = "latest" | "pending";
 
 type BlockStatus = "PENDING" | "ACCEPTED_ON_L2" | "ACCEPTED_ON_L1" | "REJECTED";
 
-type BlockHeader = {
+interface BlockHeader {
   blockHash: BlockHash;
   parentHash: BlockHash;
   blockNumber: BlockNumber;
   newRoot: Felt;
   timestamp: number;
   sequencerAddress: Felt;
-};
+}
 
-export type BlockWithTxHashesOutput = BlockWithTxHashes | PendingBlockWithTxHashes
+export type BlockWithTxHashesOutput =
+  | BlockWithTxHashes
+  | PendingBlockWithTxHashes;
 
-type BlockWithTxHashes = BlockHeader & BlockBodyWithTxHashes & {
-  status: TxnStatus
-};
+type BlockWithTxHashes = BlockHeader &
+  BlockBodyWithTxHashes & {
+    status: TxnStatus;
+  };
 
 type PendingBlockWithTxHashes = BlockBodyWithTxHashes & {
   timestamp: number;
@@ -46,11 +57,11 @@ type PendingBlockWithTxHashes = BlockBodyWithTxHashes & {
   parentHash: BlockHash;
 };
 
-type BlockBodyWithTxHashes = {
-  transactions: Array<TxnHash>
-};
+interface BlockBodyWithTxHashes {
+  transactions: Array<TxnHash>;
+}
 
-export type BlockWithTxsOutput = BlockWithTxs | PendingBlockWithTxs
+export type BlockWithTxsOutput = BlockWithTxs | PendingBlockWithTxs;
 
 type BlockWithTxs = BlockHeader & BlockBodyWithTxs & { status: BlockStatus };
 
@@ -60,40 +71,40 @@ type PendingBlockWithTxs = BlockBodyWithTxs & {
   parentHash: BlockHash;
 };
 
-type BlockBodyWithTxs = {
+interface BlockBodyWithTxs {
   transactions: Array<Txn>;
-};
+}
 
-export type StateUpdate = {
+export interface StateUpdate {
   blockHash: BlockHash;
   newRoot: Felt;
   oldRoot: Felt;
   stateDiff: StateDiff;
 }
 
-type StateDiff = {
+interface StateDiff {
   storageDiffs: Array<StorageDiffItem>;
   declaredContracts: Array<DeclaredContractItem>;
   deployedContracts: Array<DeployedContractItem>;
   nonces: Array<Nonce>;
 }
 
-type StorageDiffItem = {
+interface StorageDiffItem {
   address: Felt;
   key: Felt;
   value: Felt;
 }
 
-type DeclaredContractItem = {
+interface DeclaredContractItem {
   classHash: Felt;
 }
 
-type DeployedContractItem = {
+interface DeployedContractItem {
   address: Felt;
   classHash: Felt;
 }
 
-type Nonce = {
+interface Nonce {
   contractAddress: Address;
   nonce: Felt;
 }
@@ -107,7 +118,7 @@ type DeclareTxn = CommonTxnProperties & {
   senderAddress: Address;
 };
 
-type DeployTxn = {
+interface DeployTxn {
   transactionHash: TxnHash;
   classHash: Felt;
   version: NumAsHex;
@@ -115,28 +126,32 @@ type DeployTxn = {
   contractAddress: Felt;
   contractAddressSalt: Felt;
   constructorCalldata: Array<Felt>;
-};
+}
 
-type CommonTxnProperties = {
+interface CommonTxnProperties {
   transactionHash: TxnHash;
   maxFee: Felt;
   version: NumAsHex;
   signature: Signature;
   nonce: Felt;
   type: TxnType;
-};
+}
 
-export type FunctionCall = {
+export interface FunctionCall {
   contractAddress: Address;
   entryPointSelector: Felt;
   calldata: Array<Felt>;
-};
+}
 
 type NumAsHex = string;
 
 type Signature = Array<Felt>;
 
-export type TxnReceipt = InvokeTxnReceipt | DeclareTxnReceipt | DeployTxnReceipt | PendingTxnReceipt;
+export type TxnReceipt =
+  | InvokeTxnReceipt
+  | DeclareTxnReceipt
+  | DeployTxnReceipt
+  | PendingTxnReceipt;
 
 type InvokeTxnReceipt = CommonReceiptProperties & InvokeTxnReceiptProperties;
 
@@ -144,111 +159,116 @@ type DeclareTxnReceipt = CommonReceiptProperties;
 
 type DeployTxnReceipt = CommonReceiptProperties;
 
-type PendingTxnReceipt = PendingInvokeTxnReceipt | PendingCommonReceiptProperties;
+type PendingTxnReceipt =
+  | PendingInvokeTxnReceipt
+  | PendingCommonReceiptProperties;
 
-type CommonReceiptProperties = {
-   transactionHash: TxnHash;
-   actualFee: Felt;
-   status: TxnStatus;
-   statusData: string;
-   blockHash: BlockHash;
-   blockNumber: BlockNumber;
- };
-type InvokeTxnReceiptProperties = {
-   messagesSent: MsgToL1;
-   l1OriginMessage: MsgToL2;
-   events: Event;
- };
+interface CommonReceiptProperties {
+  transactionHash: TxnHash;
+  actualFee: Felt;
+  status: TxnStatus;
+  statusData: string;
+  blockHash: BlockHash;
+  blockNumber: BlockNumber;
+}
+interface InvokeTxnReceiptProperties {
+  messagesSent: MsgToL1;
+  l1OriginMessage: MsgToL2;
+  events: Event;
+}
 
-type PendingInvokeTxnReceipt = PendingCommonReceiptProperties & InvokeTxnReceiptProperties;
+type PendingInvokeTxnReceipt = PendingCommonReceiptProperties &
+  InvokeTxnReceiptProperties;
 
-type PendingCommonReceiptProperties = {
-   transactionHash: TxnHash;
-   actualFee: Felt;
-   type?: TxnType;
- };
+interface PendingCommonReceiptProperties {
+  transactionHash: TxnHash;
+  actualFee: Felt;
+  type?: TxnType;
+}
 
-type MsgToL1 = {
+interface MsgToL1 {
   toAddress: Felt;
   payload: Array<Felt>;
-};
+}
 
-type MsgToL2 = {
+interface MsgToL2 {
   from_address: Felt;
   payload: Array<Felt>;
-};
+}
 
 type Event = EventContent & {
   fromAddress: Felt;
 };
 
-type EventContent = {
+interface EventContent {
   keys: Array<Felt>;
   data: Array<Felt>;
 }
- 
-export type ContractClass = {
-   program: string; // a base64 representation of the compressed program code
-   entryPointsByType: {
-     constructor: ContractEntryPointList;
-     external: ContractEntryPointList;
-     l1Handler: ContractEntryPointList;
-   };
- };
- 
+
+export interface ContractClass {
+  program: string; // a base64 representation of the compressed program code
+  entryPointsByType: {
+    constructor: ContractEntryPointList;
+    external: ContractEntryPointList;
+    l1Handler: ContractEntryPointList;
+  };
+}
+
 type ContractEntryPointList = Array<ContractEntryPoint>;
 
-type ContractEntryPoint = {
-   offset: NumAsHex;
-   selector: Felt;
- };
+interface ContractEntryPoint {
+  offset: NumAsHex;
+  selector: Felt;
+}
 
-export type FeeEstimate = {
+export interface FeeEstimate {
   gasConsumed: NumAsHex;
   gasPrice: NumAsHex;
   overallFee: NumAsHex;
 }
 
-export type BlockHashAndNumberOutput = {
+export interface BlockHashAndNumberOutput {
   blockHash: BlockHash;
   blockNumber: BlockNumber;
-};
+}
 
-export type SyncingOutput = {
+export interface SyncingOutput {
   syncStatus: SyncStatus;
 }
 
-type SyncStatus = boolean | {
-  startingBlockHash: BlockHash;
-  startingBlockNum: NumAsHex;
-  currentBlockHash: BlockHash;
-  currentBlockNum: NumAsHex;
-  highestBlockHash: BlockHash;
-  highestBlockNum: NumAsHex;
-}
+type SyncStatus =
+  | boolean
+  | {
+      startingBlockHash: BlockHash;
+      startingBlockNum: NumAsHex;
+      currentBlockHash: BlockHash;
+      currentBlockNum: NumAsHex;
+      highestBlockHash: BlockHash;
+      highestBlockNum: NumAsHex;
+    };
 
 export type Filter = EventFilter & ResultPageRequest;
 
-type EventFilter = {
+interface EventFilter = {
   fromBlock: BlockId;
   toBlock: BlockId;
   address: Address;
   keys: Array<Felt>;
-}
+};
 
-type ResultPageRequest = {
+interface ResultPageRequest {
   pageSize: number;
   pageNumber: number;
-}
+};
 
-export type Events = {
+export interface Events {
   events: Array<EmittedEvent>;
   pageNumber: number;
   isLastPage: boolean;
-}
+};
 
 type EmittedEvent = Event & {
   blockHash: BlockHash;
   blockNumber: BlockNumber;
   transactionHash: TxnHash;
-}
+};
