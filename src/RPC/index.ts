@@ -28,10 +28,6 @@ class RPC {
   }
 
   async getBlockWithTxHashes(blockId: BlockId): Promise<BlockWithTxHashesOutput> {
-    if (!blockId) {
-      throw new Error ("INVALID_BLOCK_ID")
-    }
-
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
@@ -49,10 +45,6 @@ class RPC {
   }
 
   async getBlockWithTxs(blockId: BlockId): Promise<BlockWithTxsOutput> {
-    if (!blockId) {
-      throw new Error ("INVALID_BLOCK_ID")
-    }
-
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
@@ -70,10 +62,6 @@ class RPC {
   }
 
   async getStateUpdate(blockId: BlockId): Promise<StateUpdate> {
-    if (!blockId) {
-      throw new Error ("INVALID_BLOCK_ID")
-    }
-
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
@@ -91,20 +79,14 @@ class RPC {
   }
 
   async getStorageAt(contractAddress: Address, key: string, blockId: BlockId): Promise<Felt> {
-    if (!blockId) {
-      throw new Error ("INVALID_BLOCK_ID")
-    } else if (!contractAddress) {
-      throw new Error ("CONTRACT_NOT_FOUND")
-    } 
-
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
-      method: "starknet_getStateUpdate",
+      method: "starknet_getStorageAt",
       params: {
-        contractAddress: contractAddress,
+        contract_address: contractAddress,
         key: key,
-        blockId: blockId,
+        block_id: blockId.block_id,
       },
     };
 

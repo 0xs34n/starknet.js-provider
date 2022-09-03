@@ -5,7 +5,7 @@ export interface JsonRpcRequest {
   params: any;
 }
 
-export type BlockId = BlockHash | BlockNumber | BlockTag;
+export type BlockId = { block_id: BlockHash | BlockNumber | BlockTag };
 
 export type Felt = string;
 
@@ -17,9 +17,9 @@ type TxnStatus = 'PENDING' | 'ACCEPTED_ON_L2' | 'ACCEPTED_ON_L1' | 'REJECTED';
 
 type TxnType = 'declare' | 'deploy' | 'invoke' | 'l1Handler';
 
-type BlockHash = Felt;
+type BlockHash = { block_hash: Felt };
 
-type BlockNumber = number;
+type BlockNumber = { block_number: number };
 
 type BlockTag = "latest" | "pending";
 
