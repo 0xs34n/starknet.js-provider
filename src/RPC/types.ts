@@ -1,5 +1,3 @@
-
-
 export interface JsonRpcRequest {
   jsonrpc: "2.0";
   id: string;
@@ -15,21 +13,27 @@ export type Felt = string;
 
 export type Address = Felt;
 
+export type StorageKey = string;
+
 export type TxnHash = Felt;
 
-type TxnStatus = "PENDING" | "ACCEPTED_ON_L2" | "ACCEPTED_ON_L1" | "REJECTED";
+export type TxnStatus =
+  | "PENDING"
+  | "ACCEPTED_ON_L2"
+  | "ACCEPTED_ON_L1"
+  | "REJECTED";
 
-type TxnType = "declare" | "deploy" | "invoke" | "l1Handler";
+export type TxnType = "declare" | "deploy" | "invoke" | "l1Handler";
 
-interface BlockHash {
+export interface BlockHash {
   block_hash: Felt;
 }
 
-interface BlockNumber {
+export interface BlockNumber {
   block_number: number;
 }
 
-type BlockTag = "latest" | "pending";
+export type BlockTag = "latest" | "pending";
 
 type BlockStatus = "PENDING" | "ACCEPTED_ON_L2" | "ACCEPTED_ON_L1" | "REJECTED";
 
@@ -42,16 +46,12 @@ interface BlockHeader {
   sequencerAddress: Felt;
 }
 
-export type BlockWithTxHashesOutput =
-  | BlockWithTxHashes
-  | PendingBlockWithTxHashes;
-
-type BlockWithTxHashes = BlockHeader &
+export type BlockWithTxHashes = BlockHeader &
   BlockBodyWithTxHashes & {
     status: TxnStatus;
   };
 
-type PendingBlockWithTxHashes = BlockBodyWithTxHashes & {
+export type PendingBlockWithTxHashes = BlockBodyWithTxHashes & {
   timestamp: number;
   sequencerAddress: Felt;
   parentHash: BlockHash;
@@ -249,23 +249,23 @@ type SyncStatus =
 
 export type Filter = EventFilter & ResultPageRequest;
 
-interface EventFilter = {
+interface EventFilter {
   fromBlock: BlockId;
   toBlock: BlockId;
   address: Address;
   keys: Array<Felt>;
-};
+}
 
 interface ResultPageRequest {
   pageSize: number;
   pageNumber: number;
-};
+}
 
 export interface Events {
   events: Array<EmittedEvent>;
   pageNumber: number;
   isLastPage: boolean;
-};
+}
 
 type EmittedEvent = Event & {
   blockHash: BlockHash;

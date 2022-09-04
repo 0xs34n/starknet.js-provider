@@ -3,7 +3,7 @@ import {
   Address,
   BlockHashAndNumberOutput,
   BlockId,
-  BlockWithTxHashesOutput,
+  BlockWithTxHashes,
   BlockWithTxsOutput,
   ContractClass,
   Events,
@@ -13,7 +13,9 @@ import {
   FunctionCall,
   InvokeTxn,
   JsonRpcRequest,
+  PendingBlockWithTxHashes,
   StateUpdate,
+  StorageKey,
   SyncingOutput,
   Txn,
   TxnHash,
@@ -27,7 +29,9 @@ class RPC {
     this.url = new URL(url);
   }
 
-  async getBlockWithTxHashes(blockId: BlockId): Promise<BlockWithTxHashesOutput> {
+  async getBlockWithTxHashes(
+    blockId: BlockId
+  ): Promise<BlockWithTxHashes | PendingBlockWithTxHashes> {
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
@@ -61,12 +65,12 @@ class RPC {
     return await response.json();
   }
 
-  async getStateUpdate(blockId: BlockId): Promise<StateUpdate> {
+  async getStateUpdate(params: BlockId): Promise<StateUpdate> {
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
       method: "starknet_getStateUpdate",
-      params: blockId,
+      params,
     };
 
     const response = await fetch(this.url, {
@@ -78,16 +82,16 @@ class RPC {
     return await response.json();
   }
 
-  async getStorageAt(contractAddress: Address, key: string, blockId: BlockId): Promise<Felt> {
+  async getStorageAt(params: {
+    contract_address: Address;
+    key: StorageKey;
+    block_id: BlockId["block_id"];
+  }): Promise<Felt> {
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
       method: "starknet_getStorageAt",
-      params: {
-        contract_address: contractAddress,
-        key: key,
-        block_id: blockId.block_id,
-      },
+      params,
     };
 
     const response = await fetch(this.url, {
@@ -99,86 +103,44 @@ class RPC {
     return await response.json();
   }
 
-  async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {
-    // throw INVALID_TXN_HASH
-    return;
-  }
+  async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {}
 
-  async getTransactionByBlockIdAndIndex(blockId: BlockId, txIndex: number): Promise<Txn> {
-    // throw INVALID_BLOCK_ID
-    // throw INVALID_TXN_INDEX
-    return;
-  }
+  async getTransactionByBlockIdAndIndex(
+    blockId: BlockId,
+    txIndex: number
+  ): Promise<Txn> {}
 
-  async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {
-    // throw INVALID_TXN_HASH
-    return;
-  }
+  async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {}
 
-  async getClassHashAt(blockId: BlockId, contractAddress: Address): Promise<Felt> {
-    // throw INVALID_BLOCK_ID
-    // throw CONTRACT_NOT_FOUND
-    return;
-  }
+  async getClassHashAt(
+    blockId: BlockId,
+    contractAddress: Address
+  ): Promise<Felt> {}
 
-  async getClassAt(blockId: BlockId, contractAddress: Address): Promise<ContractClass> {
-    // throw INVALID_BLOCK_ID
-    // throw CONTRACT_NOT_FOUND
-    return;
-  }
+  async getClassAt(
+    blockId: BlockId,
+    contractAddress: Address
+  ): Promise<ContractClass> {}
 
-  async getBlockTransactionCount(blockId: BlockId): Promise<number> {
-    // throw INVALID_BLOCK_ID
-    return;
-  }
+  async getBlockTransactionCount(blockId: BlockId): Promise<number> {}
 
-  starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {
-    // throw CONTRACT_NOT_FOUND
-    // throw INVALID_MESSAGE_SELECTOR
-    // throw INVALID_CALL_DATA
-    // throw CONTRACT_ERROR
-    // throw INVALID_BLOCK_ID
-    return;
-  }
+  starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {}
 
-  estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {
-    // throw CONTRACT_NOT_FOUND
-    // throw INVALID_MESSAGE_SELECTOR
-    // throw INVALID_CALL_DATA
-    // throw CONTRACT_ERROR
-    // throw INVALID_BLOCK_ID
-    return;
-  }
+  estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {}
 
-  blockNumber(): Promise<number> {
-    return;
-  }
+  blockNumber(): Promise<number> {}
 
-  blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {
-    return;
-  }
+  blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {}
 
-  pendingTransactions(): Promise<Array<Txn>> {
-    return;
-  }
+  pendingTransactions(): Promise<Array<Txn>> {}
 
-  protocolVersion(): Promise<string> {
-    return;
-  }
+  protocolVersion(): Promise<string> {}
 
-  syncing(): Promise<SyncingOutput> {
-    return;
-  }
+  syncing(): Promise<SyncingOutput> {}
 
-  async getEvents(filter: Filter): Promise<Events> {
-    // throw PAGE_SIZE_TOO_BIG
-    return;
-  }
+  async getEvents(filter: Filter): Promise<Events> {}
 
-  async getNonce(contractAddress: Address): Promise<Felt> {
-    // throw CONTRACT_NOT_FOUND
-    return;
-  }
+  async getNonce(contractAddress: Address): Promise<Felt> {}
 }
 
 export default RPC;
