@@ -1,5 +1,27 @@
 import "isomorphic-unfetch";
-import { JSONRPCBody, BlockID } from "./types";
+import {
+  Address,
+  BlockHashAndNumberOutput,
+  BlockId,
+  BlockWithTxHashes,
+  BlockWithTxs,
+  ContractClass,
+  Events,
+  FeeEstimate,
+  Felt,
+  Filter,
+  FunctionCall,
+  InvokeTxn,
+  JsonRpcRequest,
+  PendingBlockWithTxHashes,
+  PendingBlockWithTxs,
+  StateUpdate,
+  StorageKey,
+  SyncingOutput,
+  Txn,
+  TxnHash,
+  TxnReceipt,
+} from "./types";
 
 class RPC {
   url: URL;
@@ -7,12 +29,15 @@ class RPC {
   constructor(url: string) {
     this.url = new URL(url);
   }
-  async getBlockWithTxHashes(block_id: BlockID): Promise<any> {
-    const body: JSONRPCBody = {
+
+  async getBlockWithTxHashes(
+    blockId: BlockId
+  ): Promise<BlockWithTxHashes | PendingBlockWithTxHashes> {
+    const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
       method: "starknet_getBlockWithTxHashes",
-      params: block_id,
+      params: blockId,
     };
 
     const response = await fetch(this.url, {
@@ -24,41 +49,102 @@ class RPC {
     return await response.json();
   }
 
-  getBlockWithTxs() {}
+  async getBlockWithTxs(
+    blockId: BlockId
+  ): Promise<BlockWithTxs | PendingBlockWithTxs> {
+    const body: JsonRpcRequest = {
+      jsonrpc: "2.0",
+      id: "0",
+      method: "starknet_getBlockWithTxs",
+      params: blockId,
+    };
 
-  getStateUpdate() {}
+    const response = await fetch(this.url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-  getStorageAt() {}
+    return await response.json();
+  }
 
-  getTransactionByHash() {}
+  async getStateUpdate(params: BlockId): Promise<StateUpdate> {
+    const body: JsonRpcRequest = {
+      jsonrpc: "2.0",
+      id: "0",
+      method: "starknet_getStateUpdate",
+      params,
+    };
 
-  getTransactionByBlockIdAndIndex() {}
+    const response = await fetch(this.url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-  getTransactionReceipt() {}
+    return await response.json();
+  }
 
-  getClassHashAt() {}
+  async getStorageAt(
+    params: {
+      contract_address: Address;
+      key: StorageKey;
+    } & BlockId // CHECK: is this best way to type block_id seems not clear but dunno how else to do it?
+  ): Promise<Felt> {
+    const body: JsonRpcRequest = {
+      jsonrpc: "2.0",
+      id: "0",
+      method: "starknet_getStorageAt",
+      params,
+    };
 
-  getClassAt() {}
+    const response = await fetch(this.url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-  getBlockTransactionCount() {}
+    return await response.json();
+  }
 
-  starknetCall() {}
+  async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {}
 
-  estimateFee() {}
+  async getTransactionByBlockIdAndIndex(
+    blockId: BlockId,
+    txIndex: number
+  ): Promise<Txn> {}
 
-  blockNumber() {}
+  async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {}
 
-  blockHashAndNumber() {}
+  async getClassHashAt(
+    blockId: BlockId,
+    contractAddress: Address
+  ): Promise<Felt> {}
 
-  pendingTransactions() {}
+  async getClassAt(
+    blockId: BlockId,
+    contractAddress: Address
+  ): Promise<ContractClass> {}
 
-  protocolVersion() {}
+  async getBlockTransactionCount(blockId: BlockId): Promise<number> {}
 
-  syncing() {}
+  starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {}
 
-  getEvents() {}
+  estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {}
 
-  getNonce() {}
+  blockNumber(): Promise<number> {}
+
+  blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {}
+
+  pendingTransactions(): Promise<Array<Txn>> {}
+
+  protocolVersion(): Promise<string> {}
+
+  syncing(): Promise<SyncingOutput> {}
+
+  async getEvents(filter: Filter): Promise<Events> {}
+
+  async getNonce(contractAddress: Address): Promise<Felt> {}
 }
 
 export default RPC;
