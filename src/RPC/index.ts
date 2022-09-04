@@ -4,7 +4,7 @@ import {
   BlockHashAndNumberOutput,
   BlockId,
   BlockWithTxHashes,
-  BlockWithTxsOutput,
+  BlockWithTxs,
   ContractClass,
   Events,
   FeeEstimate,
@@ -14,6 +14,7 @@ import {
   InvokeTxn,
   JsonRpcRequest,
   PendingBlockWithTxHashes,
+  PendingBlockWithTxs,
   StateUpdate,
   StorageKey,
   SyncingOutput,
@@ -48,7 +49,9 @@ class RPC {
     return await response.json();
   }
 
-  async getBlockWithTxs(blockId: BlockId): Promise<BlockWithTxsOutput> {
+  async getBlockWithTxs(
+    blockId: BlockId
+  ): Promise<BlockWithTxs | PendingBlockWithTxs> {
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",
@@ -82,11 +85,12 @@ class RPC {
     return await response.json();
   }
 
-  async getStorageAt(params: {
-    contract_address: Address;
-    key: StorageKey;
-    block_id: BlockId["block_id"];
-  }): Promise<Felt> {
+  async getStorageAt(
+    params: {
+      contract_address: Address;
+      key: StorageKey;
+    } & BlockId // CHECK: is this best way to type block_id seems not clear but dunno how else to do it?
+  ): Promise<Felt> {
     const body: JsonRpcRequest = {
       jsonrpc: "2.0",
       id: "0",

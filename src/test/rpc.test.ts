@@ -18,12 +18,27 @@ describe("JSON RPC Provider", () => {
       block_number,
       block_hash,
       block_tag_latest,
+      // CHECK: is this best way to skip tests?
       // block_tag_pending, SKIPPED - need to enable pending block in pathfinder
     ];
 
     describe("getBlockWithTxHashes()", () => {
       test.each(blockIds)("blockId: %p", async (blockId) => {
         const block = await rpc.getBlockWithTxHashes({ block_id: blockId });
+        expect(block).toHaveProperty("result");
+      });
+    });
+
+    describe("getBlockWithTxs()", () => {
+      test.each(blockIds)("blockId: %p", async (blockId) => {
+        const block = await rpc.getBlockWithTxs({ block_id: blockId });
+        expect(block).toHaveProperty("result");
+      });
+    });
+
+    describe("getStatusUpdate()", () => {
+      test.each(blockIds)("blockId: %p", async (blockId) => {
+        const block = await rpc.getStateUpdate({ block_id: blockId });
         expect(block).toHaveProperty("result");
       });
     });

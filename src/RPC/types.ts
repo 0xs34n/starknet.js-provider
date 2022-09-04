@@ -61,11 +61,10 @@ interface BlockBodyWithTxHashes {
   transactions: Array<TxnHash>;
 }
 
-export type BlockWithTxsOutput = BlockWithTxs | PendingBlockWithTxs;
+export type BlockWithTxs = BlockHeader &
+  BlockBodyWithTxs & { status: BlockStatus };
 
-type BlockWithTxs = BlockHeader & BlockBodyWithTxs & { status: BlockStatus };
-
-type PendingBlockWithTxs = BlockBodyWithTxs & {
+export type PendingBlockWithTxs = BlockBodyWithTxs & {
   timestamp: number;
   sequencerAddress: Felt;
   parentHash: BlockHash;
