@@ -79,14 +79,17 @@ class RPC {
     });
   }
 
-  async getStorageAt(params: {
+  async getStorageAt({
+    contract_address,
+    key,
+    block_id = "pending",
+  }: {
     contract_address: Address;
     key: StorageKey;
-    block_id?: BlockId["block_id"];
-  }): Promise<Felt> {
+  } & BlockId): Promise<Felt> {
     return this.fetchJSONRPC({
       method: "starknet_getStorageAt",
-      params: { block_id: "pending", ...params },
+      params: { contract_address, key, block_id },
     });
   }
 
