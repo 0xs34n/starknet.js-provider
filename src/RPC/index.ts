@@ -1,27 +1,18 @@
 import "isomorphic-unfetch";
 import {
   Address,
-  BlockHashAndNumberOutput,
   BlockId,
-  BlockTag,
   BlockWithTxHashes,
   BlockWithTxs,
-  ContractClass,
-  Events,
-  FeeEstimate,
   Felt,
-  Filter,
-  FunctionCall,
-  InvokeTxn,
   JSONRPCRequest,
   PendingBlockWithTxHashes,
   PendingBlockWithTxs,
   StateUpdate,
   StorageKey,
-  SyncingOutput,
+  Trace,
+  TransactionHash,
   Txn,
-  TxnHash,
-  TxnReceipt,
 } from "./types";
 
 class RPC {
@@ -86,14 +77,19 @@ class RPC {
   }: {
     contract_address: Address;
     key: StorageKey;
-  } & BlockId): Promise<Felt> {
+  } & Partial<BlockId>): Promise<Felt> {
     return this.fetchJSONRPC({
       method: "starknet_getStorageAt",
       params: { contract_address, key, block_id },
     });
   }
 
-  // async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {}
+  async getTransactionByHash(params: TransactionHash): Promise<Txn> {
+    return this.fetchJSONRPC({
+      method: "starknet_getTransactionByHash",
+      params,
+    });
+  }
 
   // async getTransactionByBlockIdAndIndex(
   //   blockId: BlockId,
@@ -131,6 +127,22 @@ class RPC {
   // async getEvents(filter: Filter): Promise<Events> {}
 
   // async getNonce(contractAddress: Address): Promise<Felt> {}
+
+  // not implemented in pathfinder
+  async traceTransaction(params: TransactionHash): Promise<Trace> {
+    return this.fetchJSONRPC({
+      method: "starknet_traceTransaction",
+      params,
+    });
+  }
+
+  // not implemented in pathfinder
+  async traceBlockTransactions(params: any) {
+    return this.fetchJSONRPC({
+      method: "starknet_traceBlockTransactions",
+      params,
+    });
+  }
 }
 
 export default RPC;

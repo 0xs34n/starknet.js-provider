@@ -8,8 +8,9 @@ import {
   block_hash,
   block_tag_latest,
   block_tag_pending,
-  contractAddress,
+  contract_address,
   key,
+  transaction_hash,
 } from "./fixtures";
 
 const rpc = new RPCProvider(RPC_URL);
@@ -47,7 +48,7 @@ describe("JSON RPC Provider", () => {
     describe("getStorageAt()", () => {
       test("block_id default pending", async () => {
         const block = await rpc.getStorageAt({
-          contract_address: contractAddress,
+          contract_address: contract_address,
           key,
         });
         expect(block).toHaveProperty("result");
@@ -55,10 +56,37 @@ describe("JSON RPC Provider", () => {
 
       test.each(blockIds)("blockId: %p", async (blockId) => {
         const block = await rpc.getStorageAt({
-          contract_address: contractAddress,
+          contract_address: contract_address,
           key,
           block_id: blockId,
         });
+        expect(block).toHaveProperty("result");
+      });
+    });
+
+    describe("getTransactionByHash()", () => {
+      test(`transaction_hash = ${transaction_hash}`, async () => {
+        const block = await rpc.getTransactionByHash({
+          transaction_hash,
+        });
+        expect(block).toHaveProperty("result");
+      });
+    });
+
+    // not be implemented in pathfinder - skip
+    describe.skip("traceTransaction()", () => {
+      test(`tx hash = ${transaction_hash}`, async () => {
+        const block = await rpc.traceTransaction({
+          transaction_hash: transaction_hash,
+        });
+        expect(block).toHaveProperty("result");
+      });
+    });
+
+    // not implemented in pathfinder - skip
+    describe.skip("traceBlockTransactions()", () => {
+      test(``, async () => {
+        const block = await rpc.traceBlockTransactions("");
         expect(block).toHaveProperty("result");
       });
     });

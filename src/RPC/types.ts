@@ -271,3 +271,39 @@ type EmittedEvent = Event & {
   blockNumber: BlockNumber;
   transactionHash: TxnHash;
 };
+
+export interface TransactionHash {
+  transaction_hash: TxnHash;
+}
+
+interface TraceRoot {
+  nonce: Felt;
+  signature: Felt;
+  function_invocation: FunctionInvocation;
+}
+
+interface FunctionInvocation {
+  caller_address: Felt;
+  code_address: Felt;
+  entry_point_type: EntryPointType;
+  call_type: CallType;
+  result: Array<Felt>;
+  calls: Array<FunctionInvocation>;
+  events: Array<Event>;
+  messages: Array<MsgToL1>;
+}
+
+enum EntryPointType {
+  EXTERNAL,
+  L1_HANDLER,
+  CONSTRUCTOR,
+}
+
+enum CallType {
+  DELEGATE,
+  CALL,
+}
+
+export interface Trace {
+  trace: TraceRoot;
+}
