@@ -3,6 +3,7 @@ import {
   Address,
   BlockHashAndNumberOutput,
   BlockId,
+  BlockTag,
   BlockWithTxHashes,
   BlockWithTxs,
   ContractClass,
@@ -12,7 +13,7 @@ import {
   Filter,
   FunctionCall,
   InvokeTxn,
-  JsonRpcRequest,
+  JSONRPCRequest,
   PendingBlockWithTxHashes,
   PendingBlockWithTxs,
   StateUpdate,
@@ -30,14 +31,18 @@ class RPC {
     this.url = new URL(url);
   }
 
-  async getBlockWithTxHashes(
-    blockId: BlockId
-  ): Promise<BlockWithTxHashes | PendingBlockWithTxHashes> {
-    const body: JsonRpcRequest = {
+  private async fetchJSONRPC({
+    method,
+    params,
+  }: {
+    method: string;
+    params: any;
+  }) {
+    const body: JSONRPCRequest = {
       jsonrpc: "2.0",
       id: "0",
-      method: "starknet_getBlockWithTxHashes",
-      params: blockId,
+      method,
+      params,
     };
 
     const response = await fetch(this.url, {
@@ -46,105 +51,83 @@ class RPC {
       body: JSON.stringify(body),
     });
 
-    return await response.json();
+    return response.json();
+  }
+
+  async getBlockWithTxHashes(
+    params: BlockId
+  ): Promise<BlockWithTxHashes | PendingBlockWithTxHashes> {
+    return this.fetchJSONRPC({
+      method: "starknet_getBlockWithTxHashes",
+      params,
+    });
   }
 
   async getBlockWithTxs(
-    blockId: BlockId
+    params: BlockId
   ): Promise<BlockWithTxs | PendingBlockWithTxs> {
-    const body: JsonRpcRequest = {
-      jsonrpc: "2.0",
-      id: "0",
+    return this.fetchJSONRPC({
       method: "starknet_getBlockWithTxs",
-      params: blockId,
-    };
-
-    const response = await fetch(this.url, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
+      params,
     });
-
-    return await response.json();
   }
 
   async getStateUpdate(params: BlockId): Promise<StateUpdate> {
-    const body: JsonRpcRequest = {
-      jsonrpc: "2.0",
-      id: "0",
+    return this.fetchJSONRPC({
       method: "starknet_getStateUpdate",
       params,
-    };
-
-    const response = await fetch(this.url, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
     });
-
-    return await response.json();
   }
 
-  async getStorageAt(
-    params: {
-      contract_address: Address;
-      key: StorageKey;
-    } & BlockId // CHECK: is this best way to type block_id seems not clear but dunno how else to do it?
-  ): Promise<Felt> {
-    const body: JsonRpcRequest = {
-      jsonrpc: "2.0",
-      id: "0",
+  async getStorageAt(params: {
+    contract_address: Address;
+    key: StorageKey;
+    block_id?: BlockId["block_id"];
+  }): Promise<Felt> {
+    return this.fetchJSONRPC({
       method: "starknet_getStorageAt",
-      params,
-    };
-
-    const response = await fetch(this.url, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
+      params: { block_id: "pending", ...params },
     });
-
-    return await response.json();
   }
 
-  async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {}
+  // async getTransactionByHash(transactionHash: TxnHash): Promise<Txn> {}
 
-  async getTransactionByBlockIdAndIndex(
-    blockId: BlockId,
-    txIndex: number
-  ): Promise<Txn> {}
+  // async getTransactionByBlockIdAndIndex(
+  //   blockId: BlockId,
+  //   txIndex: number
+  // ): Promise<Txn> {}
 
-  async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {}
+  // async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {}
 
-  async getClassHashAt(
-    blockId: BlockId,
-    contractAddress: Address
-  ): Promise<Felt> {}
+  // async getClassHashAt(
+  //   blockId: BlockId,
+  //   contractAddress: Address
+  // ): Promise<Felt> {}
 
-  async getClassAt(
-    blockId: BlockId,
-    contractAddress: Address
-  ): Promise<ContractClass> {}
+  // async getClassAt(
+  //   blockId: BlockId,
+  //   contractAddress: Address
+  // ): Promise<ContractClass> {}
 
-  async getBlockTransactionCount(blockId: BlockId): Promise<number> {}
+  // async getBlockTransactionCount(blockId: BlockId): Promise<number> {}
 
-  starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {}
+  // starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {}
 
-  estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {}
+  // estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {}
 
-  blockNumber(): Promise<number> {}
+  // blockNumber(): Promise<number> {}
 
-  blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {}
+  // blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {}
 
-  pendingTransactions(): Promise<Array<Txn>> {}
+  // pendingTransactions(): Promise<Array<Txn>> {}
 
-  protocolVersion(): Promise<string> {}
+  // protocolVersion(): Promise<string> {}
 
-  syncing(): Promise<SyncingOutput> {}
+  // syncing(): Promise<SyncingOutput> {}
 
-  async getEvents(filter: Filter): Promise<Events> {}
+  // async getEvents(filter: Filter): Promise<Events> {}
 
-  async getNonce(contractAddress: Address): Promise<Felt> {}
+  // async getNonce(contractAddress: Address): Promise<Felt> {}
 }
 
 export default RPC;

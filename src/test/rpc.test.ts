@@ -1,5 +1,7 @@
 import RPCProvider from "../RPC";
-const RPC_URL = "http://localhost:9545";
+
+const RPC_URL = process.env.RPC_URL || "http://localhost:9545";
+
 import { BlockWithTxHashes, PendingBlockWithTxHashes } from "../RPC/types";
 import {
   block_number,
@@ -8,7 +10,7 @@ import {
   block_tag_pending,
   contractAddress,
   key,
-} from "./mocks";
+} from "./fixtures";
 
 const rpc = new RPCProvider(RPC_URL);
 
@@ -18,8 +20,7 @@ describe("JSON RPC Provider", () => {
       block_number,
       block_hash,
       block_tag_latest,
-      // CHECK: is this best way to skip tests?
-      // block_tag_pending, SKIPPED - need to enable pending block in pathfinder
+      block_tag_pending,
     ];
 
     describe("getBlockWithTxHashes()", () => {
@@ -44,6 +45,14 @@ describe("JSON RPC Provider", () => {
     });
 
     describe("getStorageAt()", () => {
+      test("block_id default pending", async () => {
+        const block = await rpc.getStorageAt({
+          contract_address: contractAddress,
+          key,
+        });
+        expect(block).toHaveProperty("result");
+      });
+
       test.each(blockIds)("blockId: %p", async (blockId) => {
         const block = await rpc.getStorageAt({
           contract_address: contractAddress,

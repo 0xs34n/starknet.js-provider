@@ -1,4 +1,4 @@
-export interface JsonRpcRequest {
+export interface JSONRPCRequest {
   jsonrpc: "2.0";
   id: string;
   method: string;
