@@ -268,7 +268,7 @@
           "summary": "Get the contract class hash in the given block for the contract deployed at the given address",
           "params": [
               {
-                  "name": "block_id",
+                  "name": "block_id", // default to pending
                   "description": "The hash of the requested block, or number (height) of the requested block, or a block tag",
                   "required": true,
                   "schema": {
@@ -305,7 +305,7 @@
           "summary": "Get the contract class definition in the given block at the given address",
           "params": [
               {
-                  "name": "block_id",
+                  "name": "block_id", // pending
                   "description": "The hash of the requested block, or number (height) of the requested block, or a block tag",
                   "required": true,
                   "schema": {
@@ -380,7 +380,7 @@
                   "required": true
               },
               {
-                  "name": "block_id",
+                  "name": "block_id", // optional
                   "description": "The hash of the requested block, or number (height) of the requested block, or a block tag, for the block referencing the state or call the transaction on.",
                   "required": true,
                   "schema": {
@@ -431,7 +431,7 @@
                   "required": true
               },
               {
-                  "name": "block_id",
+                  "name": "block_id", // pending
                   "description": "The hash of the requested block, or number (height) of the requested block, or a block tag, for the block referencing the state or call the transaction on.",
                   "required": true,
                   "schema": {

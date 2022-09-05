@@ -226,16 +226,7 @@ export interface FeeEstimate {
   overallFee: NumAsHex;
 }
 
-export interface BlockHashAndNumberOutput {
-  blockHash: BlockHash;
-  blockNumber: BlockNumber;
-}
-
-export interface SyncingOutput {
-  syncStatus: SyncStatus;
-}
-
-type SyncStatus =
+export type SyncStatus =
   | boolean
   | {
       startingBlockHash: BlockHash;
@@ -246,27 +237,31 @@ type SyncStatus =
       highestBlockNum: NumAsHex;
     };
 
-export type Filter = EventFilter & ResultPageRequest;
-
-interface EventFilter {
+export interface EventFilter {
   fromBlock: BlockId;
   toBlock: BlockId;
   address: Address;
   keys: Array<Felt>;
 }
 
-interface ResultPageRequest {
+export interface ResultPageRequest {
   pageSize: number;
   pageNumber: number;
 }
 
 export interface Events {
-  events: Array<EmittedEvent>;
-  pageNumber: number;
-  isLastPage: boolean;
+  events: Array<EventFilter>;
 }
 
-type EmittedEvent = Event & {
+export interface PageNumber {
+  page_number: number;
+}
+
+export interface IsLastPage {
+  is_last_page: boolean;
+}
+
+export type EmittedEvent = Event & {
   blockHash: BlockHash;
   blockNumber: BlockNumber;
   transactionHash: TxnHash;
@@ -315,3 +310,19 @@ export interface ClassHash {
 export interface ContractAddress {
   contract_address: Address;
 }
+
+export interface Request {
+  request: FunctionCall;
+}
+
+export interface Key {
+  key: StorageKey;
+}
+
+export interface Index {
+  index: number;
+}
+
+export type ChainId = string;
+
+export type ProtocolVersion = string;

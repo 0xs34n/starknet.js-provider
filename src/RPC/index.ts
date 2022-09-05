@@ -1,22 +1,34 @@
 import "isomorphic-unfetch";
 import {
-  Address,
   BlockId,
+  BlockHash,
+  BlockNumber,
   BlockWithTxHashes,
   BlockWithTxs,
+  ChainId,
   ClassHash,
   ContractAddress,
   ContractClass,
+  Events,
+  FeeEstimate,
   Felt,
+  Index,
+  IsLastPage,
   JSONRPCRequest,
+  Key,
+  PageNumber,
   PendingBlockWithTxHashes,
   PendingBlockWithTxs,
+  ProtocolVersion,
+  Request,
   StateUpdate,
-  StorageKey,
   Trace,
   TransactionHash,
   Txn,
   TxnReceipt,
+  SyncStatus,
+  ResultPageRequest,
+  EventFilter,
 } from "./types";
 
 class RPC {
@@ -31,7 +43,7 @@ class RPC {
     params,
   }: {
     method: string;
-    params: any;
+    params?: any;
   }) {
     const body: JSONRPCRequest = {
       jsonrpc: "2.0",
@@ -75,13 +87,10 @@ class RPC {
   }
 
   async getStorageAt({
-    contract_address,
     key,
+    contract_address,
     block_id = "pending",
-  }: {
-    key: StorageKey;
-  } & ContractAddress &
-    Partial<BlockId>): Promise<Felt> {
+  }: Key & ContractAddress & Partial<BlockId>): Promise<Felt> {
     return this.fetchJSONRPC({
       method: "starknet_getStorageAt",
       params: { contract_address, key, block_id },
@@ -95,11 +104,7 @@ class RPC {
     });
   }
 
-  async getTransactionByBlockIdAndIndex(
-    params: {
-      index: number;
-    } & BlockId
-  ): Promise<Txn> {
+  async getTransactionByBlockIdAndIndex(params: Index & BlockId): Promise<Txn> {
     return this.fetchJSONRPC({
       method: "starknet_getTransactionByBlockIdAndIndex",
       params,
@@ -120,34 +125,106 @@ class RPC {
     });
   }
 
-  // async getClassHashAt(): Promise<Felt> {}
+  async getClassHashAt({
+    contract_address,
+    block_id = "pending",
+  }: ContractAddress & Partial<BlockId>): Promise<Felt> {
+    return this.fetchJSONRPC({
+      method: "starknet_getClassHashAt",
+      params: { contract_address, block_id },
+    });
+  }
 
-  // async getClassAt(
-  //   blockId: BlockId,
-  //   contractAddress: Address
-  // ): Promise<ContractClass> {}
+  async getClassAt({
+    contract_address,
+    block_id = "pending",
+  }: ContractAddress & Partial<BlockId>): Promise<ContractClass> {
+    return this.fetchJSONRPC({
+      method: "starknet_getClassAt",
+      params: { contract_address, block_id },
+    });
+  }
 
-  // async getBlockTransactionCount(blockId: BlockId): Promise<number> {}
+  async getBlockTransactionCount(params: BlockId): Promise<number> {
+    return this.fetchJSONRPC({
+      method: "starknet_getBlockTransactionCount",
+      params,
+    });
+  }
 
-  // starknetCall(request: FunctionCall, blockId: BlockId): Promise<Felt> {}
+  async starknetCall({
+    request,
+    block_id = "pending",
+  }: Request & Partial<BlockId>): Promise<Felt> {
+    return this.fetchJSONRPC({
+      method: "starknet_call",
+      params: { request, block_id },
+    });
+  }
 
-  // estimateFee(request: InvokeTxn, blockId: BlockId): Promise<FeeEstimate> {}
+  async estimateFee({
+    request,
+    block_id = "pending",
+  }: Request & Partial<BlockId>): Promise<FeeEstimate> {
+    return this.fetchJSONRPC({
+      method: "starknet_estimateFee",
+      params: { request, block_id },
+    });
+  }
 
-  // blockNumber(): Promise<number> {}
+  async blockNumber(): Promise<BlockNumber["block_number"]> {
+    return this.fetchJSONRPC({
+      method: "starknet_blockNumber",
+    });
+  }
 
-  // blockHashAndNumber(): Promise<BlockHashAndNumberOutput> {}
+  async blockHashAndNumber(): Promise<BlockHash & BlockNumber> {
+    return this.fetchJSONRPC({
+      method: "starknet_blockHashAndNumber",
+    });
+  }
 
-  // pendingTransactions(): Promise<Array<Txn>> {}
+  async chainId(): Promise<ChainId> {
+    return this.fetchJSONRPC({
+      method: "starknet_chainId",
+    });
+  }
 
-  // protocolVersion(): Promise<string> {}
+  async pendingTransactions(): Promise<Array<Txn>> {
+    return this.fetchJSONRPC({
+      method: "starknet_pendingTransactions",
+    });
+  }
 
-  // syncing(): Promise<SyncingOutput> {}
+  async protocolVersion(): Promise<ProtocolVersion> {
+    return this.fetchJSONRPC({
+      method: "starknet_protocolVersion",
+    });
+  }
 
-  // async getEvents(filter: Filter): Promise<Events> {}
+  async syncing(): Promise<false | SyncStatus> {
+    return this.fetchJSONRPC({
+      method: "syncing",
+    });
+  }
 
-  // async getNonce(contractAddress: Address): Promise<Felt> {}
+  async getEvents(
+    params: EventFilter & ResultPageRequest
+  ): Promise<Events & PageNumber & IsLastPage> {
+    return this.fetchJSONRPC({
+      method: "starknet_getEvents",
+      params,
+    });
+  }
 
-  // not implemented in pathfinder
+  async getNonce(params: ContractAddress): Promise<Felt> {
+    return this.fetchJSONRPC({
+      method: "starknet_getNonce",
+      params,
+    });
+  }
+
+  // not implemented in pathfinder -- trace api file
   async traceTransaction(params: TransactionHash): Promise<Trace> {
     return this.fetchJSONRPC({
       method: "starknet_traceTransaction",
@@ -155,7 +232,7 @@ class RPC {
     });
   }
 
-  // not implemented in pathfinder
+  // not implemented in pathfinder -- trace api file
   async traceBlockTransactions(params: any) {
     return this.fetchJSONRPC({
       method: "starknet_traceBlockTransactions",
