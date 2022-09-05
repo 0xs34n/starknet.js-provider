@@ -4,6 +4,9 @@ import {
   BlockId,
   BlockWithTxHashes,
   BlockWithTxs,
+  ClassHash,
+  ContractAddress,
+  ContractClass,
   Felt,
   JSONRPCRequest,
   PendingBlockWithTxHashes,
@@ -76,9 +79,9 @@ class RPC {
     key,
     block_id = "pending",
   }: {
-    contract_address: Address;
     key: StorageKey;
-  } & Partial<BlockId>): Promise<Felt> {
+  } & ContractAddress &
+    Partial<BlockId>): Promise<Felt> {
     return this.fetchJSONRPC({
       method: "starknet_getStorageAt",
       params: { contract_address, key, block_id },
@@ -110,10 +113,14 @@ class RPC {
     });
   }
 
-  // async getClassHashAt(
-  //   blockId: BlockId,
-  //   contractAddress: Address
-  // ): Promise<Felt> {}
+  async getClass(params: ClassHash): Promise<ContractClass> {
+    return this.fetchJSONRPC({
+      method: "starknet_getClass",
+      params,
+    });
+  }
+
+  // async getClassHashAt(): Promise<Felt> {}
 
   // async getClassAt(
   //   blockId: BlockId,

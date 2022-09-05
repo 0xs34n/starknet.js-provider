@@ -12,6 +12,7 @@ import {
   key,
   transaction_hash,
   index,
+  class_hash,
 } from "./fixtures";
 
 const rpc = new RPCProvider(RPC_URL);
@@ -89,6 +90,13 @@ describe("JSON RPC Provider", () => {
         const response = await rpc.getTransactionReceipt({
           transaction_hash,
         });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("getClass()", () => {
+      test(`contract_address = ${contract_address}`, async () => {
+        const response = await rpc.getClass({ class_hash });
         expect(response).toHaveProperty("result");
       });
     });

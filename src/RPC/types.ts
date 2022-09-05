@@ -307,3 +307,11 @@ enum CallType {
 export interface Trace {
   trace: TraceRoot;
 }
+
+export interface ClassHash {
+  class_hash: Felt;
+}
+
+export interface ContractAddress {
+  contract_address: Address;
+}

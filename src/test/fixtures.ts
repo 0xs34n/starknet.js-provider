@@ -26,3 +26,6 @@ export const transaction_hash =
   "0x603bae070c79836e8795a278e82f4b065adda3b554eac1759cbb43a57e675a8";
 
 export const index = 0;
+
+export const class_hash =
+  "0x03c96d830d2fe7279434da695c5b6476caf2c3394976b767f1700c7675071b61";
