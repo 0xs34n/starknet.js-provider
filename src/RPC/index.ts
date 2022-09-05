@@ -12,6 +12,7 @@ import {
   Events,
   FeeEstimate,
   Felt,
+  Filter,
   Index,
   IsLastPage,
   JSONRPCRequest,
@@ -27,8 +28,6 @@ import {
   Txn,
   TxnReceipt,
   SyncStatus,
-  ResultPageRequest,
-  EventFilter,
 } from "./types";
 
 class RPC {
@@ -204,13 +203,11 @@ class RPC {
 
   async syncing(): Promise<false | SyncStatus> {
     return this.fetchJSONRPC({
-      method: "syncing",
+      method: "starknet_syncing",
     });
   }
 
-  async getEvents(
-    params: EventFilter & ResultPageRequest
-  ): Promise<Events & PageNumber & IsLastPage> {
+  async getEvents(params: Filter): Promise<Events & PageNumber & IsLastPage> {
     return this.fetchJSONRPC({
       method: "starknet_getEvents",
       params,
@@ -224,7 +221,7 @@ class RPC {
     });
   }
 
-  // not implemented in pathfinder -- trace api file
+  // not implemented in pathfinder -- openrpc trace api file
   async traceTransaction(params: TransactionHash): Promise<Trace> {
     return this.fetchJSONRPC({
       method: "starknet_traceTransaction",
@@ -232,7 +229,7 @@ class RPC {
     });
   }
 
-  // not implemented in pathfinder -- trace api file
+  // not implemented in pathfinder -- openrpc trace api file
   async traceBlockTransactions(params: any) {
     return this.fetchJSONRPC({
       method: "starknet_traceBlockTransactions",

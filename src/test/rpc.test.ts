@@ -2,17 +2,18 @@ import RPCProvider from "../RPC";
 
 const RPC_URL = process.env.RPC_URL || "http://localhost:9545";
 
-import { BlockWithTxHashes, PendingBlockWithTxHashes } from "../RPC/types";
 import {
   block_number,
   block_hash,
   block_tag_latest,
   block_tag_pending,
-  contract_address,
-  key,
-  transaction_hash,
-  index,
   class_hash,
+  contract_address,
+  filter,
+  index,
+  key,
+  request,
+  transaction_hash,
 } from "./fixtures";
 
 const rpc = new RPCProvider(RPC_URL);
@@ -27,22 +28,24 @@ describe("JSON RPC Provider", () => {
     ];
 
     describe("getBlockWithTxHashes()", () => {
-      test.each(blockIds)("blockId: %p", async (blockId) => {
-        const response = await rpc.getBlockWithTxHashes({ block_id: blockId });
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getBlockWithTxHashes({ block_id });
         expect(response).toHaveProperty("result");
       });
     });
 
     describe("getBlockWithTxs()", () => {
-      test.each(blockIds)("blockId: %p", async (blockId) => {
-        const response = await rpc.getBlockWithTxs({ block_id: blockId });
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getBlockWithTxs({ block_id });
         expect(response).toHaveProperty("result");
       });
     });
 
-    describe("getStatusUpdate()", () => {
-      test.each(blockIds)("blockId: %p", async (blockId) => {
-        const response = await rpc.getStateUpdate({ block_id: blockId });
+    describe("getStateUpdate()", () => {
+      test.todo("blockId: pending");
+      // removed pending from blockIds because pathfinder fails on pending
+      test.each(blockIds.slice(0, -1))("blockId: %p", async (block_id) => {
+        const response = await rpc.getStateUpdate({ block_id });
         expect(response).toHaveProperty("result");
       });
     });
@@ -56,11 +59,11 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (blockId) => {
+      test.each(blockIds)("blockId: %p", async (block_id) => {
         const response = await rpc.getStorageAt({
           contract_address,
           key,
-          block_id: blockId,
+          block_id,
         });
         expect(response).toHaveProperty("result");
       });
@@ -76,10 +79,10 @@ describe("JSON RPC Provider", () => {
     });
 
     describe("getTransactionByBlockIdAndIndex()", () => {
-      test.each(blockIds)("blockId: %p", async (blockId) => {
+      test.each(blockIds)("blockId: %p", async (block_id) => {
         const response = await rpc.getTransactionByBlockIdAndIndex({
           index,
-          block_id: blockId,
+          block_id,
         });
         expect(response).toHaveProperty("result");
       });
@@ -97,22 +100,140 @@ describe("JSON RPC Provider", () => {
     describe("getClass()", () => {
       test(`contract_address = ${contract_address}`, async () => {
         const response = await rpc.getClass({ class_hash });
-        expect(response).toHaveProperty("result");
+        expect(await rpc.getClass({ class_hash })).toHaveProperty("result");
       });
     });
 
-    // not be implemented in pathfinder - skip
-    describe.skip("traceTransaction()", () => {
-      test(`tx hash = ${transaction_hash}`, async () => {
-        const response = await rpc.traceTransaction({
-          transaction_hash: transaction_hash,
+    describe("getClassHashAt()", () => {
+      test("block_id default pending", async () => {
+        const response = await rpc.getClassHashAt({
+          contract_address,
+        });
+        expect(response).toHaveProperty("result");
+      });
+
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getClassHashAt({
+          contract_address,
+          block_id,
         });
         expect(response).toHaveProperty("result");
       });
     });
 
-    // not implemented in pathfinder - skip
-    describe.skip("traceBlockTransactions()", () => {
+    describe("getClassAt()", () => {
+      test("block_id default pending", async () => {
+        const response = await rpc.getClassAt({
+          contract_address,
+        });
+        expect(response).toHaveProperty("result");
+      });
+
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getClassAt({
+          contract_address,
+          block_id,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("getBlockTransactionCount()", () => {
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getBlockTransactionCount({
+          block_id,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("starknetCall()", () => {
+      test("block_id default pending", async () => {
+        const response = await rpc.starknetCall({
+          request,
+        });
+        expect(response).toHaveProperty("result");
+      });
+
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.starknetCall({
+          request,
+          block_id,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("estimateFee()", () => {
+      test("block_id default pending", async () => {
+        const response = await rpc.estimateFee({
+          request,
+        });
+        expect(response).toHaveProperty("result");
+      });
+
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.estimateFee({
+          request,
+          block_id,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    test("blockNumber()", async () => {
+      const response = await rpc.blockNumber();
+      expect(response).toHaveProperty("result");
+    });
+
+    test("blockHashAndNumber()", async () => {
+      const response = await rpc.blockHashAndNumber();
+      expect(response).toHaveProperty("result");
+    });
+
+    test("chainId()", async () => {
+      const response = await rpc.chainId();
+      expect(response).toHaveProperty("result");
+    });
+
+    test("pendingTransactions()", async () => {
+      const response = await rpc.pendingTransactions();
+      expect(response).toHaveProperty("result");
+    });
+
+    test.failing("protocolVersion()", async () => {
+      const response = await rpc.protocolVersion();
+      expect(response).toHaveProperty("result");
+    });
+
+    test("syncing()", async () => {
+      const response = await rpc.syncing();
+      expect(response).toHaveProperty("result");
+    });
+
+    describe("getEvents()", () => {
+      test.each(blockIds)("blockId: %p", async (block_id) => {
+        const response = await rpc.getEvents(filter(block_id));
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    test("getNonce()", async () => {
+      const response = await rpc.getNonce({ contract_address });
+      expect(response).toHaveProperty("result");
+    });
+
+    // not be implemented in pathfinder - skip
+    describe.skip("traceTransaction() - not implemented in pathfinder", () => {
+      test(`tx hash = ${transaction_hash}`, async () => {
+        const response = await rpc.traceTransaction({
+          transaction_hash,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe.skip("traceBlockTransactions() - not implemented in pathfinder", () => {
       test(``, async () => {
         const response = await rpc.traceBlockTransactions("");
         expect(response).toHaveProperty("result");

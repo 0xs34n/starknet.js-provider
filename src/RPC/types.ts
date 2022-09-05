@@ -137,8 +137,8 @@ interface CommonTxnProperties {
 }
 
 export interface FunctionCall {
-  contractAddress: Address;
-  entryPointSelector: Felt;
+  contract_address: Address;
+  entry_point_selector: Felt;
   calldata: Array<Felt>;
 }
 
@@ -237,16 +237,19 @@ export type SyncStatus =
       highestBlockNum: NumAsHex;
     };
 
+export interface Filter {
+  filter: EventFilter & ResultPageRequest;
+}
 export interface EventFilter {
-  fromBlock: BlockId;
-  toBlock: BlockId;
+  fromBlock: BlockId["block_id"];
+  toBlock: BlockId["block_id"];
   address: Address;
   keys: Array<Felt>;
 }
 
 export interface ResultPageRequest {
-  pageSize: number;
-  pageNumber: number;
+  page_size: number;
+  page_number: number;
 }
 
 export interface Events {

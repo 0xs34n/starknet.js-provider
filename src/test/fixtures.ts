@@ -4,13 +4,14 @@ import {
   BlockTag,
   Address,
   StorageKey,
+  BlockId,
 } from "../RPC/types";
 
-export const block_number: BlockNumber = { block_number: 49 };
+export const block_number: BlockNumber = { block_number: 322475 };
 
 export const block_hash: BlockHash = {
   block_hash:
-    "0x1554f5ffdb2b911524293b626e5d34cc3b92cbea5f3206294645d6d8338351b",
+    "0x1398bcf388534773c7709c6c457cffb80b5e88268c001f6615df0568a5a2d15",
 };
 
 export const block_tag_latest: BlockTag = "latest";
@@ -29,3 +30,30 @@ export const index = 0;
 
 export const class_hash =
   "0x03c96d830d2fe7279434da695c5b6476caf2c3394976b767f1700c7675071b61";
+
+export const request = {
+  contract_address:
+    "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+  entry_point_selector:
+    "0x2e4263afad30923c891518314c3c95dbe830a16874e8abc5777a9a20b54c76e",
+  calldata: [
+    "0x04c83d3fa770187d7b0a23b3aa7132c7c8273fb4ec3db416f86e4a385596769a",
+  ],
+};
+
+export const page_size = 1;
+
+export const page_number = 1;
+
+export function filter(block_id: BlockId["block_id"]) {
+  return {
+    filter: {
+      fromBlock: block_id,
+      toBlock: block_id,
+      address: contract_address,
+      keys: [key],
+      page_number,
+      page_size,
+    },
+  };
+}
