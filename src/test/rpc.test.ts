@@ -18,7 +18,7 @@ import {
 
 const rpc = new RPCProvider(RPC_URL);
 
-describe("JSON RPC Provider", () => {
+describe("JSON-RPC Provider", () => {
   describe("methods", () => {
     const blockIds = [
       block_number,
