@@ -11,23 +11,27 @@ import {
   ContractClass,
   Events,
   FeeEstimate,
+  FunctionInvocationObj,
   Felt,
   Filter,
   Index,
   IsLastPage,
   JSONRPCRequest,
   Key,
+  MaxFee,
   PageNumber,
   PendingBlockWithTxHashes,
   PendingBlockWithTxs,
   ProtocolVersion,
   Request,
   StateUpdate,
-  Trace,
   TransactionHash,
   Txn,
   TxnReceipt,
+  SignatureObj,
   SyncStatus,
+  Version,
+  ContractClassObj,
 } from "./types";
 
 class RPC {
@@ -221,6 +225,24 @@ class RPC {
     });
   }
 
+  async addInvokeTransaction(
+    params: FunctionInvocationObj & SignatureObj & MaxFee & Version
+  ): Promise<TransactionHash> {
+    return this.fetchJSONRPC({
+      method: "starknet_addInvokeTransaction",
+      params,
+    });
+  }
+
+  async addDeclareTransaction(
+    params: ContractClassObj & Version
+  ): Promise<TransactionHash & ClassHash> {
+    return this.fetchJSONRPC({
+      method: "starknet_addDeclareTransaction",
+      params,
+    });
+  }
+
   // not implemented in pathfinder -- openrpc trace api file
   // async traceTransaction(params: TransactionHash): Promise<Trace> {
   //   return this.fetchJSONRPC({
@@ -235,7 +257,7 @@ class RPC {
   //     method: "starknet_traceBlockTransactions",
   //     params,
   //   });
-  }
+  // }
 }
 
 export default RPC;

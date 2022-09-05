@@ -223,21 +223,17 @@ describe("JSON-RPC Provider", () => {
       expect(response).toHaveProperty("result");
     });
 
+    test.todo("addInvokeTransaction()");
+
+    test.todo("addDeclareTransaction()");
+
     // not be implemented in pathfinder - skip
     describe.skip("traceTransaction() - not implemented in pathfinder", () => {
-      test(`tx hash = ${transaction_hash}`, async () => {
-        const response = await rpc.traceTransaction({
-          transaction_hash,
-        });
-        expect(response).toHaveProperty("result");
-      });
+      test(`tx hash = ${transaction_hash}`, async () => {});
     });
 
     describe.skip("traceBlockTransactions() - not implemented in pathfinder", () => {
-      test(``, async () => {
-        const response = await rpc.traceBlockTransactions("");
-        expect(response).toHaveProperty("result");
-      });
+      test(``, async () => {});
     });
   });
 });

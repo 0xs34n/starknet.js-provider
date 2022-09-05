@@ -329,3 +329,23 @@ export interface Index {
 export type ChainId = string;
 
 export type ProtocolVersion = string;
+
+export interface FunctionInvocationObj {
+  function_invocation: FunctionCall;
+}
+
+export interface SignatureObj {
+  signature: Signature;
+}
+
+export interface MaxFee {
+  max_fee: NumAsHex;
+}
+
+export interface Version {
+  version: NumAsHex;
+}
+
+export interface ContractClassObj {
+  contract_class: ContractClass;
+}
