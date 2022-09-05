@@ -13,6 +13,7 @@ import {
   Trace,
   TransactionHash,
   Txn,
+  TxnReceipt,
 } from "./types";
 
 class RPC {
@@ -91,12 +92,23 @@ class RPC {
     });
   }
 
-  // async getTransactionByBlockIdAndIndex(
-  //   blockId: BlockId,
-  //   txIndex: number
-  // ): Promise<Txn> {}
+  async getTransactionByBlockIdAndIndex(
+    params: {
+      index: number;
+    } & BlockId
+  ): Promise<Txn> {
+    return this.fetchJSONRPC({
+      method: "starknet_getTransactionByBlockIdAndIndex",
+      params,
+    });
+  }
 
-  // async getTransactionReceipt(transactionHash: TxnHash): Promise<TxnReceipt> {}
+  async getTransactionReceipt(params: TransactionHash): Promise<TxnReceipt> {
+    return this.fetchJSONRPC({
+      method: "starknet_getTransactionReceipt",
+      params,
+    });
+  }
 
   // async getClassHashAt(
   //   blockId: BlockId,

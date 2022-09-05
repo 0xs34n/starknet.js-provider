@@ -11,6 +11,7 @@ import {
   contract_address,
   key,
   transaction_hash,
+  index,
 } from "./fixtures";
 
 const rpc = new RPCProvider(RPC_URL);
@@ -48,7 +49,7 @@ describe("JSON RPC Provider", () => {
     describe("getStorageAt()", () => {
       test("block_id default pending", async () => {
         const response = await rpc.getStorageAt({
-          contract_address: contract_address,
+          contract_address,
           key,
         });
         expect(response).toHaveProperty("result");
@@ -56,7 +57,7 @@ describe("JSON RPC Provider", () => {
 
       test.each(blockIds)("blockId: %p", async (blockId) => {
         const response = await rpc.getStorageAt({
-          contract_address: contract_address,
+          contract_address,
           key,
           block_id: blockId,
         });
@@ -67,6 +68,25 @@ describe("JSON RPC Provider", () => {
     describe("getTransactionByHash()", () => {
       test(`transaction_hash = ${transaction_hash}`, async () => {
         const response = await rpc.getTransactionByHash({
+          transaction_hash,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("getTransactionByBlockIdAndIndex()", () => {
+      test.each(blockIds)("blockId: %p", async (blockId) => {
+        const response = await rpc.getTransactionByBlockIdAndIndex({
+          index,
+          block_id: blockId,
+        });
+        expect(response).toHaveProperty("result");
+      });
+    });
+
+    describe("getTransactionReceipt()", () => {
+      test(`transaction_hash = ${transaction_hash}`, async () => {
+        const response = await rpc.getTransactionReceipt({
           transaction_hash,
         });
         expect(response).toHaveProperty("result");

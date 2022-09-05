@@ -24,3 +24,5 @@ export const key: StorageKey = "0x999";
 
 export const transaction_hash =
   "0x603bae070c79836e8795a278e82f4b065adda3b554eac1759cbb43a57e675a8";
+
+export const index = 0;
