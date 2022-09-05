@@ -1,7 +1,5 @@
 import RPCProvider from "../RPC";
 
-const RPC_URL = process.env.RPC_URL || "http://localhost:9545";
-
 import {
   block_number,
   block_hash,
@@ -15,6 +13,8 @@ import {
   request,
   transaction_hash,
 } from "./fixtures";
+
+const RPC_URL = process.env.RPC_URL || "http://localhost:9545";
 
 const rpc = new RPCProvider(RPC_URL);
 
