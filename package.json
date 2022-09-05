@@ -10,7 +10,7 @@
     "isomorphic-unfetch": "^3.1.0"
   },
   "name": "starknet.js-provider",
-  "description": "A minimal RPC provider implementation",
+  "description": "StarkNet JSON RPC provider implementation in JavaScript",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

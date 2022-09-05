@@ -1,3 +1,1 @@
-### For learning purposes only
-
-#### A minimal RPC provider implementation
+# JSON-RPC StarkNet Node Provider Implementation for JavaScript
