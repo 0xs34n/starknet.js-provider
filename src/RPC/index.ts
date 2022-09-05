@@ -222,19 +222,19 @@ class RPC {
   }
 
   // not implemented in pathfinder -- openrpc trace api file
-  async traceTransaction(params: TransactionHash): Promise<Trace> {
-    return this.fetchJSONRPC({
-      method: "starknet_traceTransaction",
-      params,
-    });
-  }
+  // async traceTransaction(params: TransactionHash): Promise<Trace> {
+  //   return this.fetchJSONRPC({
+  //     method: "starknet_traceTransaction",
+  //     params,
+  //   });
+  // }
 
-  // not implemented in pathfinder -- openrpc trace api file
-  async traceBlockTransactions(params: any) {
-    return this.fetchJSONRPC({
-      method: "starknet_traceBlockTransactions",
-      params,
-    });
+  // // not implemented in pathfinder -- openrpc trace api file
+  // async traceBlockTransactions(params: any) {
+  //   return this.fetchJSONRPC({
+  //     method: "starknet_traceBlockTransactions",
+  //     params,
+  //   });
   }
 }
 
