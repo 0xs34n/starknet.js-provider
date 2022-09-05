@@ -1,4 +1,4 @@
-### JSON-RPC StarkNet Node Provider Implementation for JavaScript
+### JSON-RPC StarkNet Node Provider in JavaScript
 
 ###### Install
 
