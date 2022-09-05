@@ -28,23 +28,23 @@ describe("JSON RPC Provider", () => {
     ];
 
     describe("getBlockWithTxHashes()", () => {
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getBlockWithTxHashes({ block_id });
         expect(response).toHaveProperty("result");
       });
     });
 
     describe("getBlockWithTxs()", () => {
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getBlockWithTxs({ block_id });
         expect(response).toHaveProperty("result");
       });
     });
 
     describe("getStateUpdate()", () => {
-      test.todo("blockId: pending");
+      test.todo("block_id: pending");
       // removed pending from blockIds because pathfinder fails on pending
-      test.each(blockIds.slice(0, -1))("blockId: %p", async (block_id) => {
+      test.each(blockIds.slice(0, -1))("block_id: %p", async (block_id) => {
         const response = await rpc.getStateUpdate({ block_id });
         expect(response).toHaveProperty("result");
       });
@@ -59,7 +59,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getStorageAt({
           contract_address,
           key,
@@ -79,7 +79,7 @@ describe("JSON RPC Provider", () => {
     });
 
     describe("getTransactionByBlockIdAndIndex()", () => {
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getTransactionByBlockIdAndIndex({
           index,
           block_id,
@@ -112,7 +112,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getClassHashAt({
           contract_address,
           block_id,
@@ -129,7 +129,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getClassAt({
           contract_address,
           block_id,
@@ -139,7 +139,7 @@ describe("JSON RPC Provider", () => {
     });
 
     describe("getBlockTransactionCount()", () => {
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getBlockTransactionCount({
           block_id,
         });
@@ -155,7 +155,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.starknetCall({
           request,
           block_id,
@@ -172,7 +172,7 @@ describe("JSON RPC Provider", () => {
         expect(response).toHaveProperty("result");
       });
 
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.estimateFee({
           request,
           block_id,
@@ -212,7 +212,7 @@ describe("JSON RPC Provider", () => {
     });
 
     describe("getEvents()", () => {
-      test.each(blockIds)("blockId: %p", async (block_id) => {
+      test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getEvents(filter(block_id));
         expect(response).toHaveProperty("result");
       });
