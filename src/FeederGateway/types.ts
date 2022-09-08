@@ -1,1 +1,1 @@
-export type network = "MAIN_NET" | "TEST_NET";
+export type Network = "MAIN_NET" | "TEST_NET";

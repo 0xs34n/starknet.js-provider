@@ -1,14 +1,43 @@
-import { getFeederGatewayUrl } from "./utils";
-import { network } from "./types";
+import { checkGateway, getFeederGatewayUrl, handleResponse } from "./utils";
+import { Network } from "./types";
 
-class FeederGateway {
+class FeederGatewayProvider {
   url: URL;
 
-  constructor(network: network) {
+  constructor(network: Network) {
     this.url = new URL(getFeederGatewayUrl(network));
   }
 
-  getContractAddresses() {}
+  async fetchPostEndpoint(endpoint: string, body: any) {
+    const gateway = checkGateway(endpoint);
+
+    const response = await fetch(`${this.url}${gateway}/${endpoint}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    return await response.json();
+  }
+
+  async fetchGetEndpoint(endpoint: string, params?: any) {
+    const url = new URL(`${this.url}feeder_gateway/${endpoint}`);
+
+    for (const key in params) {
+      url.searchParams.append(key, params.key);
+    }
+
+    try {
+      const response = await fetch(url.href);
+      return handleResponse(response);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getContractAddresses() {
+    return await this.fetchGetEndpoint("get_contract_addresses");
+  }
 
   callContract() {}
 
@@ -46,3 +75,5 @@ class FeederGateway {
 
   getTransactionIdByHash() {}
 }
+
+export default FeederGatewayProvider;
