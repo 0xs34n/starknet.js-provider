@@ -5,7 +5,7 @@ import {
   Address,
   StorageKey,
   BlockId,
-} from "../RPC/types";
+} from "../types";
 
 export const block_number: BlockNumber = { block_number: 322475 };
 
@@ -57,3 +57,22 @@ export function filter(block_id: BlockId["block_id"]) {
     },
   };
 }
+
+export const invoke = {
+  function_invocation: request,
+  signature: [],
+  max_fee: "0x0",
+  version: "1",
+};
+
+export const declare = {
+  contract_class: {
+    program: "",
+    entryPointsByType: {
+      constructor: "",
+      external: "",
+      l1Handler: "",
+    },
+  },
+  version: "1",
+};

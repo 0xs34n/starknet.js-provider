@@ -205,7 +205,7 @@ interface EventContent {
 }
 
 export interface ContractClass {
-  program: string; // a base64 representation of the compressed program code
+  program: string;
   entryPointsByType: {
     constructor: ContractEntryPointList;
     external: ContractEntryPointList;

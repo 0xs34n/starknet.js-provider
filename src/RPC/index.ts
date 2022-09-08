@@ -61,7 +61,15 @@ class RPC {
       body: JSON.stringify(body),
     });
 
-    return response.json();
+    const responseJSON = await response.json();
+
+    const { error, result }: any = responseJSON;
+
+    if (error) {
+      throw error;
+    } else {
+      return result;
+    }
   }
 
   async getBlockWithTxHashes(
@@ -155,7 +163,7 @@ class RPC {
     });
   }
 
-  async starknetCall({
+  async call({
     request,
     block_id = "pending",
   }: Request & Partial<BlockId>): Promise<Felt> {
