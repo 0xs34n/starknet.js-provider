@@ -1,4 +1,6 @@
-### JSON-RPC StarkNet Node Provider in JavaScript
+# Starknet Provider for RPC and Feeder Gateway
+
+that is fully up to date with the latest starknet.
 
 ###### Install
 
