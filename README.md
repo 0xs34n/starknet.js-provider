@@ -2,10 +2,10 @@
 
 that is fully up to date with the latest starknet.
 
-###### Install
+## Install
 
 `npm install`
 
-###### Run Test Suite
+## Testing
 
 `npm run test`
