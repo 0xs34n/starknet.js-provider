@@ -8,8 +8,8 @@ class FeederGatewayProvider {
     this.url = new URL(getFeederGatewayUrl(network));
   }
 
-  async fetchPostEndpoint(endpoint: string, body: any) {
-    const gateway = checkGateway(endpoint);
+  async fetchPostEndpoint(endpoint: string, body: Object) {
+    const gateway = gatewayCheck(endpoint);
 
     const response = await fetch(`${this.url}${gateway}/${endpoint}`, {
       method: "POST",

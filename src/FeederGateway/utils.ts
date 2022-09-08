@@ -10,7 +10,7 @@ export function getFeederGatewayUrl(network: Network) {
   }
 }
 
-export function checkGateway(endpoint: string) {
+export function gatewayCheck(endpoint: string) {
   if (endpoint === "add_transaction") {
     return "gateway";
   } else {
