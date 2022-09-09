@@ -34,7 +34,7 @@ import {
   ContractClassObj,
 } from "./types";
 
-class RPC {
+class CoreJSONRPC {
   url: URL;
 
   constructor(url: string) {
@@ -268,4 +268,4 @@ class RPC {
   // }
 }
 
-export default RPC;
+export default CoreJSONRPC;

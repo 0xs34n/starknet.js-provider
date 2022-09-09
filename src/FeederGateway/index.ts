@@ -1,5 +1,14 @@
-import { checkGateway, getFeederGatewayUrl, handleResponse } from "./utils";
-import { Network } from "./types";
+import { gatewayCheck, getFeederGatewayUrl, handleResponse } from "./utils";
+import {
+  Network,
+  BlockHash,
+  BlockId,
+  TransactionId,
+  TransactionHash,
+  ContractAddress,
+  Key,
+  BlockNumber,
+} from "./types";
 
 class FeederGatewayProvider {
   url: URL;
@@ -24,7 +33,7 @@ class FeederGatewayProvider {
     const url = new URL(`${this.url}feeder_gateway/${endpoint}`);
 
     for (const key in params) {
-      url.searchParams.append(key, params.key);
+      url.searchParams.append(key, params[key]);
     }
 
     try {
@@ -43,37 +52,63 @@ class FeederGatewayProvider {
 
   estimateFee() {}
 
-  getBlock() {}
+  async getBlock(params: BlockHash) {
+    return await this.fetchGetEndpoint("get_block", params);
+  }
 
   getBlockTraces() {}
 
-  getStateUpdate() {}
+  async getStateUpdate(params: BlockNumber) {
+    return await this.fetchGetEndpoint("get_state_update", params);
+  }
 
-  getCode() {}
+  async getCode(params: ContractAddress) {
+    return await this.fetchGetEndpoint("get_code", params);
+  }
 
-  getFullContract() {}
+  async getFullContract(params: ContractAddress) {
+    return await this.fetchGetEndpoint("get_full_contract", params);
+  }
 
   getClassHashAt() {}
 
   getClassByHash() {}
 
-  getStorageAt() {}
+  async getStorageAt(params: ContractAddress & Key & BlockNumber) {
+    return await this.fetchGetEndpoint("get_storage_at", params);
+  }
 
-  getTransactionStatus() {}
+  async getTransactionStatus(params: TransactionHash) {
+    return await this.fetchGetEndpoint("get_transaction_status", params);
+  }
 
-  getTransaction() {}
+  async getTransaction(params: TransactionHash) {
+    return await this.fetchGetEndpoint("get_transaction", params);
+  }
 
-  getTransactionReceipt() {}
+  async getTransactionReceipt(params: TransactionHash) {
+    return await this.fetchGetEndpoint("get_transaction_receipt", params);
+  }
 
-  getTransactionTrace() {}
+  async getTransactionTrace(params: TransactionHash) {
+    return await this.fetchGetEndpoint("get_transaction_trace", params);
+  }
 
-  getBlockHashById() {}
+  async getBlockHashById(params: BlockId) {
+    return await this.fetchGetEndpoint("get_block_hash_by_id", params);
+  }
 
-  getBlockIdByHash() {}
+  async getBlockIdByHash(params: BlockHash) {
+    return await this.fetchGetEndpoint("get_block_id_by_hash", params);
+  }
 
-  getTransactionHashById() {}
+  async getTransactionHashById(params: TransactionId) {
+    return await this.fetchGetEndpoint("get_transaction_hash_by_id", params);
+  }
 
-  getTransactionIdByHash() {}
+  async getTransactionIdByHash(params: TransactionHash) {
+    return await this.fetchGetEndpoint("get_transaction_id_by_hash", params);
+  }
 }
 
 export default FeederGatewayProvider;
