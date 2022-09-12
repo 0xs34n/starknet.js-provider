@@ -5,6 +5,7 @@ import {
   Address,
   StorageKey,
   BlockId,
+  Filter,
 } from "../types";
 
 export const block_number: BlockNumber = { block_number: 322475 };
@@ -75,4 +76,16 @@ export const declare = {
     },
   },
   version: "1",
+};
+
+export const filterAstralyEvent: Filter = {
+  filter: {
+    fromBlock: { block_number: 300000 },
+    toBlock: { block_number: 320000 },
+    address:
+      "0x03236409bbcd10f29d56cbe270e383d865e71837959cea7127611d4890bb46d",
+    keys: ["0x49e950a233749038bf94fe7e3862784769a3d602cf49f29a7d815a2baed32b"],
+    page_number: 1,
+    page_size: 50,
+  },
 };

@@ -12,6 +12,7 @@ import {
   key,
   request,
   transaction_hash,
+  filterAstralyEvent,
 } from "./fixtures";
 
 const RPC_URL = process.env.RPC_URL || "http://localhost:9545";
@@ -215,6 +216,12 @@ describe("JSON-RPC Provider", () => {
     describe("getEvents()", () => {
       test.each(blockIds)("block_id: %p", async (block_id) => {
         const response = await rpc.getEvents(filter(block_id));
+        expect(response).toEqual(expect.anything());
+      });
+
+      test("Astraly Event", async () => {
+        const response = await rpc.getEvents(filterAstralyEvent);
+        console.log("Astraly Event", response);
         expect(response).toEqual(expect.anything());
       });
     });
